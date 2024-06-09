@@ -19,7 +19,7 @@ const TopBar = ({ xp, points }: { xp: number; points: number }) => {
         </ThemedText>
       </View>
 
-      <ThemedText type="defaultSemiBold">Points: {points}</ThemedText>
+      <ThemedText type="defaultSemiBold">{points} pts</ThemedText>
     </ThemedView>
   );
 };
