@@ -1,9 +1,14 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { Tabs } from "expo-router";
+import {
+  CompassIcon,
+  HomeIcon,
+  ListMinusIcon,
+  TrophyIcon,
+  UserIcon,
+} from "lucide-react-native";
+import React from "react";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -11,25 +16,55 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
-      }}>
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: "#FAEDCD",
+          borderTopWidth: 2,
+          borderTopColor: "#D4A373",
+        },
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="discover/index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
+          title: "Discover",
+          tabBarLabel: "",
+          tabBarIcon: ({ color }) => <CompassIcon color={color} size={24} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="timeline/index"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
+          title: "Timeline",
+          tabBarLabel: "",
+          tabBarIcon: ({ color }) => <ListMinusIcon color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarLabel: "",
+          tabBarIcon: ({ color }) => <HomeIcon color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="leaderboard/index"
+        options={{
+          title: "Leaderboard",
+          tabBarLabel: "",
+          tabBarIcon: ({ color }) => <TrophyIcon color={color} size={24} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile/[user]"
+        options={{
+          title: "Profile",
+          tabBarLabel: "",
+          href: "/profile/evanbacon",
+          tabBarIcon: ({ color }) => <UserIcon color={color} size={24} />,
         }}
       />
     </Tabs>
