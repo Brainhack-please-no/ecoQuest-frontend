@@ -30,62 +30,64 @@ export default function CameraC() {
   }
 
   const takePicture = async () => {
-    if (cameraRef.current && camerReady) {
-      const photo = await cameraRef.current.takePictureAsync();
-      console.log(photo);
-      // return photo;
-      // const rsp = await fetch('https://example.com/upload', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ photo }),
-      // });
-      // const data = await rsp.json();
+    // if (!cameraRef.current || !camerReady) {
+    //   return;
+    // }
 
-      const data = {
-        details: [
-          {
-            original_name: 'Organic Bananas',
-            matched_name: 'Chiquita Organic Bananas',
-            category: 'Produce',
-            quantity: '1 bunch',
-            price_per_unit: '$0.59',
-            total_price: '$1.77',
-            plastic_packaging_count: 0,
-            'eco-friendliness_score': 1.0,
-          },
-          {
-            original_name: '2L Diet Soda',
-            matched_name: 'Coca-Cola Diet Soda 2L',
-            category: 'Beverages',
-            quantity: '1 bottle',
-            price_per_unit: '$1.99',
-            total_price: '$1.99',
-            plastic_packaging_count: 1,
-            'eco-friendliness_score': 0.5,
-          },
-          {
-            original_name: 'Unknown Item',
-            matched_name: 'N/A',
-            category: 'N/A',
-            quantity: 'N/A',
-            price_per_unit: 'N/A',
-            total_price: 'N/A',
-            plastic_packaging_count: 0,
-            'eco-friendliness_score': 0.0,
-          },
-        ],
-        metrics: {
-          plastic_free_packaging: 1,
-          plastic_bags_used: 1,
-          sustainable_clothing: 0,
+    // const photo = await cameraRef.current.takePictureAsync();
+    // console.log(photo);
+    // return photo;
+    // const rsp = await fetch('https://example.com/upload', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ photo }),
+    // });
+    // const data = await rsp.json();
+
+    const data = {
+      details: [
+        {
+          original_name: 'Organic Bananas',
+          matched_name: 'Chiquita Organic Bananas',
+          category: 'Produce',
+          quantity: '1 bunch',
+          price_per_unit: '$0.59',
+          total_price: '$1.77',
+          plastic_packaging_count: 0,
+          'eco-friendliness_score': 1.0,
         },
-      };
+        {
+          original_name: '2L Diet Soda',
+          matched_name: 'Coca-Cola Diet Soda 2L',
+          category: 'Beverages',
+          quantity: '1 bottle',
+          price_per_unit: '$1.99',
+          total_price: '$1.99',
+          plastic_packaging_count: 1,
+          'eco-friendliness_score': 0.5,
+        },
+        {
+          original_name: 'Unknown Item',
+          matched_name: 'N/A',
+          category: 'N/A',
+          quantity: 'N/A',
+          price_per_unit: 'N/A',
+          total_price: 'N/A',
+          plastic_packaging_count: 0,
+          'eco-friendliness_score': 0.0,
+        },
+      ],
+      metrics: {
+        plastic_free_packaging: 1,
+        plastic_bags_used: 1,
+        sustainable_clothing: 0,
+      },
+    };
 
-      console.log('pushing');
-      router.push({
-        pathname: 'confirmmetric',
-        params: { data: JSON.stringify(data) },
-      });
-    }
+    console.log('pushing');
+    router.replace({
+      pathname: 'confirmmetric',
+      params: { data: JSON.stringify(data) },
+    });
   };
 
   // If the page was reloaded or navigated to directly, then the modal should be presented as

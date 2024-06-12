@@ -12,6 +12,7 @@ export default function Leaderboard() {
   const ItemContainer = styled.View`
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     background-color: ${({ rank }: { rank: number }) => {
       switch (rank) {
         case 1:
@@ -21,13 +22,13 @@ export default function Leaderboard() {
         case 3:
           return '#CD7F32'; // bronze
         default:
-          return '#FFFFFF'; // pale green
+          return '#FEF9EC'; // pale green
       }
     }};
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 10px;
-    border-width: 1px;
+    border-width: 2px;
     border-color: ${({ rank }: { rank: number }) => {
       switch (rank) {
         case 1:
@@ -37,22 +38,9 @@ export default function Leaderboard() {
         case 3:
           return '#CD7F32';
         default:
-          return '#000000';
+          return '#D4A373';
       }
     }};
-  `;
-  const Rank = styled.Text`
-    font-size: 18px;
-    width: 30px;
-  `;
-
-  const Name = styled.Text`
-    font-size: 18px;
-    flex: 1;
-  `;
-  const Points = styled.Text`
-    font-size: 18px;
-    color: #333;
   `;
 
   const LeaderboardItem = ({
@@ -73,9 +61,11 @@ export default function Leaderboard() {
       }}
     >
       <ItemContainer rank={rank} key={id}>
-        <Rank>{rank}</Rank>
-        <Name>{name}</Name>
-        <Points>{points.toLocaleString()} pts</Points>
+        <View className="flex-row items-center gap-3">
+          <Text type="defaultBold">{rank}</Text>
+          <Text type="defaultSemiBold">{name}</Text>
+        </View>
+        <Text type="defaultBold">{points.toLocaleString()} pts</Text>
       </ItemContainer>
     </Pressable>
   );

@@ -1,6 +1,6 @@
 export interface ResponseData {
   details: Detail[];
-  metric: Metric;
+  metrics: Metric;
 }
 
 export interface Metric {
