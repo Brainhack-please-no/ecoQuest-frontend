@@ -50,7 +50,7 @@ export default function CameraC() {
             price_per_unit: '$0.59',
             total_price: '$1.77',
             plastic_packaging_count: 0,
-            'eco-friendliness_score': 1,
+            'eco-friendliness_score': 1.0,
           },
           {
             original_name: '2L Diet Soda',
@@ -70,7 +70,7 @@ export default function CameraC() {
             price_per_unit: 'N/A',
             total_price: 'N/A',
             plastic_packaging_count: 0,
-            'eco-friendliness_score': 0,
+            'eco-friendliness_score': 0.0,
           },
         ],
         metrics: {
@@ -80,7 +80,10 @@ export default function CameraC() {
         },
       };
 
-      router.push({ pathname: 'confirmmetric', params: { data } });
+      router.push({
+        pathname: 'confirmmetric',
+        params: { data: JSON.stringify(data) },
+      });
     }
   };
 
