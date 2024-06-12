@@ -1,9 +1,9 @@
 import { Text } from '@/ui/text';
-import { Camera, CameraView, useCameraPermissions } from 'expo-camera';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useRef, useState } from 'react';
-import { Button, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, TouchableOpacity, View } from 'react-native';
 
 export const data = {};
 
@@ -80,6 +80,7 @@ export default function CameraC() {
         },
       };
 
+      console.log('pushing');
       router.push({
         pathname: 'confirmmetric',
         params: { data: JSON.stringify(data) },

@@ -1,13 +1,15 @@
-import { Animated, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet, View } from 'react-native';
 
 export const CustomScrollView = ({
   children,
+  bounces = false,
 }: {
   children: React.ReactNode;
+  bounces?: boolean;
 }) => (
   <View style={styles.container}>
     <Animated.ScrollView
-      bounces={false}
+      bounces={bounces}
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
     >
@@ -27,6 +29,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 32,
     gap: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 });

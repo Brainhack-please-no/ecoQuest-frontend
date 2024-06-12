@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
-import type { ConfigContext, ExpoConfig } from "@expo/config";
+import type { ConfigContext, ExpoConfig } from '@expo/config';
 
-import { ClientEnv, Env } from "./env";
+import { ClientEnv, Env } from './env';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -9,20 +9,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   description: `${Env.NAME} Mobile App`,
   owner: Env.EXPO_ACCOUNT_OWNER,
   scheme: Env.SCHEME,
-  slug: "obytesapp",
+  slug: 'ecoquest',
   version: Env.VERSION.toString(),
-  orientation: "portrait",
-  icon: "./assets/icon.png",
-  userInterfaceStyle: "automatic",
+  orientation: 'portrait',
+  icon: './assets/icon.png',
+  userInterfaceStyle: 'automatic',
   splash: {
-    image: "./assets/splash.png",
-    resizeMode: "cover",
-    backgroundColor: "#2E3C4B",
+    image: './assets/splash.png',
+    resizeMode: 'cover',
+    backgroundColor: '#2E3C4B',
   },
   updates: {
     fallbackToCacheTimeout: 0,
   },
-  assetBundlePatterns: ["**/*"],
+  assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
     bundleIdentifier: Env.BUNDLE_ID,
@@ -32,54 +32,54 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     adaptiveIcon: {
-      foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#2E3C4B",
+      foregroundImage: './assets/adaptive-icon.png',
+      backgroundColor: '#2E3C4B',
     },
     package: Env.PACKAGE,
   },
   web: {
-    favicon: "./assets/favicon.png",
-    bundler: "metro",
+    favicon: './assets/favicon.png',
+    bundler: 'metro',
   },
   plugins: [
     [
-      "expo-font",
+      'expo-font',
       {
         fonts: [
-          "./assets/fonts/ClashDisplay-Bold.otf",
-          "./assets/fonts/ClashDisplay-SemiBold.otf",
-          "./assets/fonts/ClashDisplay-Regular.otf",
-          "./assets/fonts/ClashDisplay-Medium.otf",
-          "./assets/fonts/Satoshi-Bold.otf",
-          "./assets/fonts/Satoshi-Light.otf",
-          "./assets/fonts/Satoshi-Regular.otf",
-          "./assets/fonts/Satoshi-Medium.otf",
+          './assets/fonts/ClashDisplay-Bold.otf',
+          './assets/fonts/ClashDisplay-SemiBold.otf',
+          './assets/fonts/ClashDisplay-Regular.otf',
+          './assets/fonts/ClashDisplay-Medium.otf',
+          './assets/fonts/Satoshi-Bold.otf',
+          './assets/fonts/Satoshi-Light.otf',
+          './assets/fonts/Satoshi-Regular.otf',
+          './assets/fonts/Satoshi-Medium.otf',
         ],
       },
     ],
-    "expo-router",
+    'expo-router',
     [
-      "expo-build-properties",
+      'expo-build-properties',
       {
         android: {
-          kotlinVersion: "1.7.22", // this is for softinput package
+          kotlinVersion: '1.7.22', // this is for softinput package
         },
       },
     ],
     [
-      "app-icon-badge",
+      'app-icon-badge',
       {
-        enabled: Env.APP_ENV !== "production",
+        enabled: Env.APP_ENV !== 'production',
         badges: [
           {
             text: Env.APP_ENV,
-            type: "banner",
-            color: "white",
+            type: 'banner',
+            color: 'white',
           },
           {
             text: Env.VERSION.toString(),
-            type: "ribbon",
-            color: "white",
+            type: 'ribbon',
+            color: 'white',
           },
         ],
       },

@@ -1,15 +1,9 @@
 import { useLeaderboard } from '@/api/leaderboard';
 import { CustomScrollView } from '@/components/custom-scroll-view';
 import { Title } from '@/components/title';
+import { ActivityIndicator, FocusAwareStatusBar, Pressable, Text } from '@/ui';
+import { Stack, router } from 'expo-router';
 import { View } from 'react-native';
-import { router, Stack, useLocalSearchParams } from 'expo-router';
-import {
-  ActivityIndicator,
-  Button,
-  FocusAwareStatusBar,
-  Pressable,
-  Text,
-} from '@/ui';
 import styled from 'styled-components/native';
 
 export default function Leaderboard() {
@@ -18,7 +12,7 @@ export default function Leaderboard() {
   const ItemContainer = styled.View`
     flex-direction: row;
     align-items: center;
-    background-color: ${({ rank }) => {
+    background-color: ${({ rank }: { rank: number }) => {
       switch (rank) {
         case 1:
           return '#FFD700'; // gold
@@ -34,7 +28,7 @@ export default function Leaderboard() {
     margin-bottom: 10px;
     border-radius: 10px;
     border-width: 1px;
-    border-color: ${({ rank }) => {
+    border-color: ${({ rank }: { rank: number }) => {
       switch (rank) {
         case 1:
           return '#FFD700';
@@ -61,7 +55,17 @@ export default function Leaderboard() {
     color: #333;
   `;
 
-  const LeaderboardItem = ({ id, rank, name, points }) => (
+  const LeaderboardItem = ({
+    id,
+    rank,
+    name,
+    points,
+  }: {
+    id: number;
+    rank: number;
+    name: string;
+    points: number;
+  }) => (
     <Pressable
       onPress={() => {
         console.log('pressed');
@@ -94,7 +98,7 @@ export default function Leaderboard() {
     );
   }
   return (
-    <CustomScrollView>
+    <CustomScrollView bounces>
       <View>
         <Title
           title="Leaderboard"
