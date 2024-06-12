@@ -61,7 +61,7 @@ export default function TabLayout() {
           options={{
             title: 'Profile',
             tabBarLabel: '',
-            href: '/profile/evanbacon',
+            href: '/profile/1',
             tabBarIcon: ({ color }) => <UserIcon color={color} size={24} />,
           }}
         />

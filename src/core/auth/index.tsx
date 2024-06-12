@@ -1,39 +1,59 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import { createSelectors } from "../utils";
-import type { TokenType } from "./utils";
-import { getToken, removeToken, setToken } from "./utils";
+import { createSelectors } from '../utils';
+import type { TokenType } from './utils';
+import {
+  getToken,
+  getUser,
+  removeToken,
+  removeUser,
+  setToken,
+  setUser,
+} from './utils';
 
 interface AuthState {
   token: TokenType | null;
-  status: "idle" | "signOut" | "signIn";
+  status: 'idle' | 'signOut' | 'signIn';
+  user: User | null;
   signIn: (data: TokenType) => void;
   signOut: () => void;
   hydrate: () => void;
 }
 
+interface User {
+  id: string;
+  username: string;
+  points: number;
+  xp: number;
+}
+
 const _useAuth = create<AuthState>((set, get) => ({
-  status: "idle",
+  status: 'idle',
   token: null,
-  signIn: (token) => {
+  user: null,
+  signIn: (token, user) => {
     setToken(token);
-    set({ status: "signIn", token });
+    setUser(user);
+    set({ status: 'signIn', token, user });
   },
   signOut: () => {
     removeToken();
-    set({ status: "signOut", token: null });
+    removeUser();
+    set({ status: 'signOut', token: null, user: null });
   },
   hydrate: () => {
     try {
       const userToken = getToken();
+      const user = getUser();
       if (userToken !== null) {
-        get().signIn(userToken);
+        get().signIn(userToken, user);
       } else {
         get().signOut();
       }
     } catch (e) {
       // catch error here
       // Maybe sign_out user!
+      get().signOut();
     }
   },
 }));

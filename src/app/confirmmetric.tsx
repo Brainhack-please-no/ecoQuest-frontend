@@ -1,12 +1,16 @@
 import { CustomScrollView } from '@/components/custom-scroll-view';
-import { SafeAreaView, Text, View } from '@/ui';
-import { useLocalSearchParams } from 'expo-router';
+import { Button, SafeAreaView, Text, View } from '@/ui';
+import { router, useLocalSearchParams } from 'expo-router';
 import { ResponseData } from './types';
 
 export default function MetricDetail() {
   const { details, metrics } = JSON.parse(
     useLocalSearchParams().data as string
   ) as ResponseData;
+
+  function handleSubmit() {
+    console.log('submit');
+  }
 
   return (
     <CustomScrollView>
@@ -34,13 +38,28 @@ export default function MetricDetail() {
             </View>
           ))}
         </View>
-        <View className="pt-10">
+        <View className="my-10">
           <Text type="title">Metrics</Text>
           {Object.entries(metrics).map(([key, value], index) => (
-            <View key={index}>
-              <Text>{`${key}: ${value}`}</Text>
+            // <View key={index}>
+            //   <Text>{`${key}: ${value}`}</Text>
+            // </View>
+            <View
+              key={index}
+              className="flex flex-row items-center justify-between py-1"
+            >
+              <Text type="defaultSemiBold">{key}</Text>
+              <Text type="defaultBold">{value}</Text>
             </View>
           ))}
+        </View>
+        <View className="">
+          <Button label="Confirm" onPress={handleSubmit} />
+          <Button
+            label="Cancel"
+            onPress={() => router.replace('/')}
+            variant="outline"
+          />
         </View>
       </SafeAreaView>
     </CustomScrollView>

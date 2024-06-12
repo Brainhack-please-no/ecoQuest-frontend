@@ -1,13 +1,52 @@
 import { useLeaderboard } from '@/api/leaderboard';
 import { CustomScrollView } from '@/components/custom-scroll-view';
 import { Title } from '@/components/title';
+import { useAuth } from '@/core';
+import { API_URL, Env } from '@/core/env';
 import { ActivityIndicator, FocusAwareStatusBar, Pressable, Text } from '@/ui';
 import { Stack, router } from 'expo-router';
-import { View } from 'react-native';
+import React from 'react';
+import { RefreshControl, View } from 'react-native';
 import styled from 'styled-components/native';
 
 export default function Leaderboard() {
-  const { data, isPending, isError } = useLeaderboard({});
+  const signOut = useAuth.use.signOut();
+  const { access } = useAuth.use.token();
+
+  const [data, setData] = React.useState(null);
+  const [isPending, setIsPending] = React.useState(true);
+  const [isError, setIsError] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${API_URL}/leaderboard`, {
+        headers: {
+          Authorization: `${access}`,
+        },
+      });
+      if (response.status === 400) {
+        console.log('logout');
+        signOut();
+      }
+      const result = await response.json();
+      setData(result);
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsPending(false);
+      setRefreshing(false);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetchData();
+  }, []);
 
   const ItemContainer = styled.View`
     flex-direction: row;
@@ -56,7 +95,6 @@ export default function Leaderboard() {
   }) => (
     <Pressable
       onPress={() => {
-        console.log('pressed');
         router.push(`/profile/${id}`);
       }}
     >
@@ -88,7 +126,12 @@ export default function Leaderboard() {
     );
   }
   return (
-    <CustomScrollView bounces>
+    <CustomScrollView
+      bounces
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View>
         <Title
           title="Leaderboard"
@@ -96,12 +139,12 @@ export default function Leaderboard() {
         />
       </View>
       <View>
-        {data.data.map((item, index) => (
+        {data.map((item, index) => (
           <LeaderboardItem
-            key={item.userId}
-            id={item.userId}
+            key={item.id}
+            id={item.id}
             rank={index + 1}
-            name={item.name}
+            name={item.username}
             points={item.points}
           />
         ))}

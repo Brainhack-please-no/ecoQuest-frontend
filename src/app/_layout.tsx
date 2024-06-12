@@ -12,7 +12,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import FlashMessage from 'react-native-flash-message';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export { ErrorBoundary } from 'expo-router';
 

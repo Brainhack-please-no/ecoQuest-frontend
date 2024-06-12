@@ -3,8 +3,10 @@ import { Animated, StyleSheet, View } from 'react-native';
 export const CustomScrollView = ({
   children,
   bounces = false,
+  refreshControl,
 }: {
   children: React.ReactNode;
+  refreshControl?: any;
   bounces?: boolean;
 }) => (
   <View style={styles.container}>
@@ -12,6 +14,7 @@ export const CustomScrollView = ({
       bounces={bounces}
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
+      refreshControl={refreshControl}
     >
       <View style={styles.content}>{children}</View>
     </Animated.ScrollView>

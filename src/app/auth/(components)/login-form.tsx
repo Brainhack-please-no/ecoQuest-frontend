@@ -13,7 +13,7 @@ const schema = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(6, 'Password must be at least 6 characters'),
+    .min(3, 'Password must be at least 3 characters'),
 });
 
 export type FormType = z.infer<typeof schema>;
