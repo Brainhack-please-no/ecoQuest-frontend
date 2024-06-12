@@ -1,26 +1,26 @@
-import "react-native-gesture-handler";
+import 'react-native-gesture-handler';
 //
-import { APIProvider } from "@/api";
-import { loadSelectedTheme } from "@/core";
-import { hydrateAuth } from "@/core/auth";
-import { useThemeConfig } from "@/core/use-theme-config";
-import { useReactNavigationDevTools } from "@dev-plugins/react-navigation";
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { ThemeProvider } from "@react-navigation/native";
-import { Stack, useNavigationContainerRef } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import FlashMessage from "react-native-flash-message";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import "react-native-reanimated";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { APIProvider } from '@/api';
+import { loadSelectedTheme } from '@/core';
+import { hydrateAuth } from '@/core/auth';
+import { useThemeConfig } from '@/core/use-theme-config';
+import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { ThemeProvider } from '@react-navigation/native';
+import { Stack, useNavigationContainerRef } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import FlashMessage from 'react-native-flash-message';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export { ErrorBoundary } from "expo-router";
+export { ErrorBoundary } from 'expo-router';
 
 // Import  global CSS file
-import "../../global.css";
+import '../../global.css';
 
 export const unstable_settings = {
-  initialRouteName: "(app)",
+  initialRouteName: '(app)',
 };
 
 hydrateAuth();
@@ -49,9 +49,10 @@ function RootLayoutNav() {
           options={{
             // Set the presentation mode to modal for our modal route.
             headerShown: false,
-            presentation: "modal",
+            presentation: 'modal',
           }}
         />
+        <Stack.Screen name="confirmmetric" options={{ headerShown: false }} />
       </Stack>
     </Providers>
   );
