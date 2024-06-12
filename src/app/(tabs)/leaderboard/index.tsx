@@ -2,85 +2,17 @@ import { useLeaderboard } from '@/api/leaderboard';
 import { CustomScrollView } from '@/components/custom-scroll-view';
 import { Title } from '@/components/title';
 import { useAuth } from '@/core';
-import { API_URL, Env } from '@/core/env';
-import { ActivityIndicator, FocusAwareStatusBar, Pressable, Text } from '@/ui';
+import { ActivityIndicator, Pressable, Text } from '@/ui';
 import { Stack, router } from 'expo-router';
 import React from 'react';
 import { RefreshControl, View } from 'react-native';
-import styled from 'styled-components/native';
+import LinearGradient from 'react-native-linear-gradient';
+import { twMerge } from 'tailwind-merge';
 
 export default function Leaderboard() {
-  const signOut = useAuth.use.signOut();
-  const { access } = useAuth.use.token();
+  const user = useAuth.use.user();
 
-  const [data, setData] = React.useState(null);
-  const [isPending, setIsPending] = React.useState(true);
-  const [isError, setIsError] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`${API_URL}/leaderboard`, {
-        headers: {
-          Authorization: `${access}`,
-        },
-      });
-      if (response.status === 400) {
-        console.log('logout');
-        signOut();
-      }
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      setIsError(true);
-    } finally {
-      setIsPending(false);
-      setRefreshing(false);
-    }
-  };
-
-  React.useEffect(() => {
-    fetchData();
-  }, []);
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    fetchData();
-  }, []);
-
-  const ItemContainer = styled.View`
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    background-color: ${({ rank }: { rank: number }) => {
-      switch (rank) {
-        case 1:
-          return '#FFD700'; // gold
-        case 2:
-          return '#C0C0C0'; // silver
-        case 3:
-          return '#CD7F32'; // bronze
-        default:
-          return '#FEF9EC'; // pale green
-      }
-    }};
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: ${({ rank }: { rank: number }) => {
-      switch (rank) {
-        case 1:
-          return '#FFD700';
-        case 2:
-          return '#C0C0C0';
-        case 3:
-          return '#CD7F32';
-        default:
-          return '#D4A373';
-      }
-    }};
-  `;
+  const { data: leaderboard, refetch, isLoading, isError } = useLeaderboard();
 
   const LeaderboardItem = ({
     id,
@@ -92,26 +24,69 @@ export default function Leaderboard() {
     rank: number;
     name: string;
     points: number;
-  }) => (
-    <Pressable
-      onPress={() => {
-        router.push(`/profile/${id}`);
-      }}
-    >
-      <ItemContainer rank={rank} key={id}>
+  }) => {
+    const content = (
+      <View
+        key={id}
+        className={twMerge(
+          'flex-row items-center justify-between p-4 bg-[#FFF9EC] shadow-md shadow-yellow-700/20 rounded-xl',
+          user?._id === id && 'bg-green-300',
+          rank === 1 && 'bg-transparent '
+        )}
+      >
         <View className="flex-row items-center gap-3">
-          <Text type="defaultBold">{rank}</Text>
-          <Text type="defaultSemiBold">{name}</Text>
+          <Text
+            type="defaultBold"
+            className={twMerge(rank === 1 && 'text-white')}
+          >
+            {rank}
+          </Text>
+          <Text
+            type="defaultSemiBold"
+            className={twMerge(
+              rank === 1 && 'text-white',
+              user?._id === id && 'font-bold'
+            )}
+          >
+            {user?._id === id ? 'You' : name}
+          </Text>
         </View>
-        <Text type="defaultBold">{points.toLocaleString()} pts</Text>
-      </ItemContainer>
-    </Pressable>
-  );
-  if (isPending) {
+        <Text
+          type="defaultBold"
+          className={twMerge(rank === 1 && 'text-white')}
+        >
+          {points.toLocaleString()} pts
+        </Text>
+      </View>
+    );
+
+    return (
+      <Pressable
+        onPress={() => {
+          router.push(`/${id}`);
+        }}
+      >
+        {rank <= 3 ? (
+          <LinearGradient
+            colors={['#FD7D11', '#DC21E6']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{
+              borderRadius: 12,
+              padding: 2,
+            }}
+          >
+            {content}
+          </LinearGradient>
+        ) : (
+          content
+        )}
+      </Pressable>
+    );
+  };
+  if (isLoading) {
     return (
       <View className="flex-1 justify-center  p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
-        <FocusAwareStatusBar />
         <ActivityIndicator />
       </View>
     );
@@ -119,9 +94,7 @@ export default function Leaderboard() {
   if (isError) {
     return (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
-        <FocusAwareStatusBar />
-        <Text className="text-center">Error loading profile</Text>
+        <Text className="text-center">Error loading leaderboard</Text>
       </View>
     );
   }
@@ -129,7 +102,7 @@ export default function Leaderboard() {
     <CustomScrollView
       bounces
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        <RefreshControl refreshing={isLoading} onRefresh={refetch} />
       }
     >
       <View>
@@ -138,8 +111,8 @@ export default function Leaderboard() {
           description="Complete to get the highest score in your country"
         />
       </View>
-      <View>
-        {data.map((item, index) => (
+      <View className="gap-2">
+        {leaderboard.map((item, index) => (
           <LeaderboardItem
             key={item.id}
             id={item.id}

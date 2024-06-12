@@ -1,6 +1,7 @@
+import { useUser } from '@/api/user';
 import { useAuth } from '@/core';
 import { Text } from '@/ui/text';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -28,12 +29,30 @@ const calculateLevel = (xp: number) => {
   return { level, xpRequired, currentXp: xp };
 };
 
-const TopBar = ({ xp, points }: { xp: number; points: number }) => {
+const TopBar = ({
+  xp,
+  points,
+  refreshing,
+}: {
+  xp: number;
+  points: number;
+  refreshing: boolean;
+}) => {
   const insets = useSafeAreaInsets();
-  const user = useAuth.use.user();
+  const { user } = useAuth.getState();
+  const { data: userData, refetch } = useUser(user?._id, { refreshing });
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 500);
+
+    return () => clearInterval(intervalId);
+  }, [refetch]);
+
   const { level, xpRequired, currentXp } = useMemo(
-    () => calculateLevel(user.xp),
-    [user.xp]
+    () => calculateLevel(userData?.xp),
+    [userData?.xp]
   );
 
   return (
@@ -50,7 +69,7 @@ const TopBar = ({ xp, points }: { xp: number; points: number }) => {
         </Text>
       </View>
 
-      <Text type="defaultBold">{user.points} pts</Text>
+      <Text type="defaultBold">{userData?.points} pts</Text>
     </View>
   );
 };

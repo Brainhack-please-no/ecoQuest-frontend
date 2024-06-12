@@ -2,9 +2,9 @@ import { useAuth } from '@/core';
 import { API_URL } from '@/core/env';
 import { useQuery } from '@tanstack/react-query';
 
-const fetchLeaderboard = async () => {
+const fetchQuests = async () => {
   const { token, signOut } = useAuth.getState();
-  const response = await fetch(`${API_URL}/leaderboard`, {
+  const response = await fetch(`${API_URL}/quests`, {
     headers: {
       Authorization: `${token?.access}`,
       'Content-Type': 'application/json',
@@ -19,10 +19,10 @@ const fetchLeaderboard = async () => {
   return response.json();
 };
 
-export const useLeaderboard = () => {
+export const useQuests = () => {
   return useQuery({
-    queryKey: ['leaderboard'],
-    queryFn: () => fetchLeaderboard(),
+    queryKey: ['quests'],
+    queryFn: () => fetchQuests(),
     refetchOnWindowFocus: true,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

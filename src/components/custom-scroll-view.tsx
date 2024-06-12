@@ -4,10 +4,12 @@ export const CustomScrollView = ({
   children,
   bounces = false,
   refreshControl,
+  stickyHeaderIndices,
 }: {
   children: React.ReactNode;
   refreshControl?: any;
   bounces?: boolean;
+  stickyHeaderIndices?: number[];
 }) => (
   <View style={styles.container}>
     <Animated.ScrollView
@@ -15,6 +17,7 @@ export const CustomScrollView = ({
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
       refreshControl={refreshControl}
+      stickyHeaderIndices={stickyHeaderIndices}
     >
       <View style={styles.content}>{children}</View>
     </Animated.ScrollView>

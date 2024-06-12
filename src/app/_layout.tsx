@@ -53,6 +53,10 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen name="confirmmetric" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="[user]"
+          options={{ headerShown: false, presentation: 'modal' }}
+        />
       </Stack>
     </Providers>
   );

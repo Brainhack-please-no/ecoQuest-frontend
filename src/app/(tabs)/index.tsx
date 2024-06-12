@@ -1,56 +1,56 @@
 import { useFetchWithToken } from '@/api';
+import { useQuests } from '@/api/quest';
 import { useUser } from '@/api/user';
 import { CustomScrollView } from '@/components/custom-scroll-view';
 import QuestCard from '@/components/quest/quest-card';
 import { Title } from '@/components/title';
 import { useAuth } from '@/core';
 import { Text } from '@/ui/text';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { ChevronsUpIcon } from 'lucide-react-native';
 import * as React from 'react';
-import { Animated, RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Animated,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 export default function HomeScreen() {
   const gestureTranslateY = new Animated.Value(0);
 
-  const { fetchWithToken } = useFetchWithToken();
   const authUser = useAuth.use.user();
 
-  const { data: user, refetch } = useUser(authUser._id);
-  // Call refetch to manually refresh user data
-  const handleRefresh = () => {
-    refetch();
-  };
+  const { data: user, refetch, isLoading } = useUser(authUser._id);
+  const {
+    data: quests,
+    refetch: refetchQuests,
+    isLoading: isLoadingQuests,
+  } = useQuests();
 
-  const [data, setData] = React.useState(null);
-  const [isPending, setIsPending] = React.useState(true);
-  const [isError, setIsError] = React.useState(false);
-  const [refreshing, setRefreshing] = React.useState(false);
-
-  const fetchData = async () => {
-    try {
-      const response = await fetchWithToken(`/quests`, 'GET');
-      const result = await response.json();
-      console.log(result);
-      setData(result);
-    } catch (error) {
-      setIsError(true);
-    } finally {
-      setIsPending(false);
-      setRefreshing(false);
-    }
-  };
-
-  React.useEffect(() => {
-    fetchData();
-  }, []);
+  const refreshing = isLoading || isLoadingQuests;
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    fetchData();
     refetch();
-  }, []);
+    refetchQuests();
+  }, [refetch, refetchQuests]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch();
+      refetchQuests();
+    }, [refetch, refetchQuests])
+  );
+
+  if (isLoading || isLoadingQuests) {
+    return (
+      <View className="flex-1 justify-center  p-3">
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   const parseMetrics = (metrics) => {
     try {
@@ -80,8 +80,8 @@ export default function HomeScreen() {
 
   const userMetrics = parseMetrics(user.metrics);
 
-  const sortedData = data
-    ? data
+  const sortedData = quests
+    ? quests
         .map((quest) => ({
           ...quest,
           status: getQuestStatus(quest, userMetrics),

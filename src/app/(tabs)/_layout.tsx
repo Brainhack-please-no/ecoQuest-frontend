@@ -28,7 +28,7 @@ export default function TabLayout() {
 
   return (
     <>
-      <TopBar xp={100} points={200} />
+      <TopBar xp={100} points={200} refreshing={false} />
       <Tabs
         screenOptions={{
           headerShown: false,

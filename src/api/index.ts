@@ -2,7 +2,6 @@ import { useAuth } from '@/core';
 import { API_URL } from '@/core/env';
 
 export * from './common';
-export * from './profile';
 export * from './types';
 
 export const useFetchWithToken = () => {
@@ -12,19 +11,27 @@ export const useFetchWithToken = () => {
   const fetchWithToken = async (
     route: string,
     method: 'GET' | 'POST',
-    body?: Record<string, any>
+    body?: Record<string, any>,
+    contentType:
+      | 'application/json'
+      | 'multipart/form-data'
+      | undefined = 'application/json'
   ) => {
     const rsp = await fetch(API_URL + route, {
       headers: token
         ? {
             Authorization: `${token.access}`,
-            'Content-Type': 'application/json',
+            ...(contentType && { 'Content-Type': contentType }),
           }
         : {
-            'Content-Type': 'application/json',
+            ...(contentType && { 'Content-Type': contentType }),
           },
       method: method,
-      body: body ? JSON.stringify(body) : undefined,
+      body: body
+        ? contentType === 'application/json'
+          ? JSON.stringify(body)
+          : body
+        : undefined,
     });
     if (rsp.status === 400) {
       console.log('signout');

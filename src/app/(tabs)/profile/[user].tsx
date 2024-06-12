@@ -1,7 +1,7 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 
-import { useFetchWithToken } from '@/api';
+import { useUser } from '@/api/user';
 import { CustomScrollView } from '@/components/custom-scroll-view';
 import { Title } from '@/components/title';
 import { useAuth } from '@/core';
@@ -12,6 +12,9 @@ import {
   Text,
   View,
 } from '@/ui';
+import { MedalIcon } from 'lucide-react-native';
+import { Animated, Pressable, RefreshControl } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
 const metricMapping = {
   plastic_bags_used: 'No. of plastic bags used',
@@ -22,61 +25,39 @@ const metricMapping = {
 const medals = [
   {
     name: 'Plastic Free',
-    description: 'No plastic packaging',
   },
   {
     name: 'Sustainable Clothing',
-    description: 'No plastic packaging',
+  },
+  {
+    name: 'ecoQuest',
+  },
+  {
+    name: 'Completionist',
   },
 ];
 
 export default function User() {
   const local = useLocalSearchParams<{ user: string }>();
   const signOut = useAuth.use.signOut();
-  const { fetchWithToken } = useFetchWithToken();
+  if (!local.user) {
+    return <Text>No user</Text>;
+  }
   const user = useAuth.use.user();
-  console.log(user, local.user);
 
-  const [data, setData] = React.useState(null);
-  const [isPending, setIsPending] = React.useState(true);
-  const [isError, setIsError] = React.useState(false);
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchWithToken(
-          `/users/data/${local.user}`,
-          'GET'
-        );
-        const result = await response.json();
-        setData(result);
-      } catch (error) {
-        setIsError(true);
-      } finally {
-        setIsPending(false);
-      }
-    };
-
-    fetchData();
-  }, [local.user]);
+  const { data, refetch, isPending, isError } = useUser(local.user);
 
   if (isPending) {
     return (
       <View className="flex-1 justify-center  p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
-        <FocusAwareStatusBar />
         <ActivityIndicator />
-        <Button onPress={signOut} label="Sign Out" />
       </View>
     );
   }
   if (isError) {
     return (
       <View className="flex-1 justify-center p-3">
-        <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
-        <FocusAwareStatusBar />
         <Text className="text-center">Error loading profile</Text>
-        <Button onPress={signOut} label="Sign Out" />
       </View>
     );
   }
@@ -88,7 +69,12 @@ export default function User() {
   }
 
   return (
-    <CustomScrollView>
+    <CustomScrollView
+      bounces
+      refreshControl={
+        <RefreshControl onRefresh={refetch} refreshing={isPending} />
+      }
+    >
       <Stack.Screen options={{ title: 'Post', headerBackTitle: 'Feed' }} />
       <FocusAwareStatusBar />
       <Title title={data.username} description="5 friends" />
@@ -97,19 +83,18 @@ export default function User() {
           <Text type="defaultSemiBold" className="text-xl">
             Statistics
           </Text>
-          <Text>Some interesting facts since you've started using the app</Text>
+          <Text>Some interesting facts since you've joined</Text>
         </View>
         <View>
-          {metrics &&
-            Object.entries(metrics).map(([key, value], index) => (
-              <View
-                key={index}
-                className="flex flex-row items-center justify-between py-1"
-              >
-                <Text type="defaultSemiBold">{metricMapping[key]}</Text>
-                <Text type="defaultBold">{value}</Text>
-              </View>
-            ))}
+          {Object.entries(metricMapping).map(([key, value], index) => (
+            <View
+              key={index}
+              className="flex flex-row items-center justify-between py-1"
+            >
+              <Text type="defaultSemiBold">{value}</Text>
+              <Text type="defaultBold">{metrics[key]}</Text>
+            </View>
+          ))}
         </View>
       </View>
       <View className="flex gap-8 pt-12">
@@ -122,16 +107,52 @@ export default function User() {
             your friends!
           </Text>
         </View>
-        <View className="flex flex-row flex-wrap gap-4">
-          {medals.map((stat, index) => (
-            <View
-              key={index}
-              className="border-2 border-gray-200 rounded-lg p-4 w-[45%]"
-            >
-              <Text type="defaultSemiBold">{stat.name}</Text>
-              <Text type="defaultBold">{stat.description}</Text>
-            </View>
-          ))}
+        <View className="flex flex-row flex-wrap gap-4 pb-16">
+          {medals.map((stat, index) => {
+            const scale = new Animated.Value(1);
+
+            const onPressIn = () => {
+              Animated.spring(scale, {
+                toValue: 0.94,
+                useNativeDriver: true,
+              }).start();
+            };
+
+            const onPressOut = () => {
+              Animated.spring(scale, {
+                toValue: 1,
+                useNativeDriver: true,
+              }).start();
+            };
+
+            return (
+              <Pressable
+                key={index}
+                onPressIn={onPressIn}
+                onPressOut={onPressOut}
+                className="w-[45%]"
+              >
+                <Animated.View
+                  style={{ transform: [{ scale }] }}
+                  className="bg-[#FFF9EC] shadow-md shadow-yellow-600/20 rounded-xl p-4 flex-1 flex flex-col gap-2"
+                >
+                  <View className="flex items-center justify-center">
+                    <MedalIcon
+                      size={64}
+                      strokeWidth={1.5}
+                      className={twMerge(
+                        'color-yellow-500 m-4',
+                        index === 0 ? 'color-yellow-500' : 'color-gray-500'
+                      )}
+                    />
+                  </View>
+                  <Text type="defaultBold" className="text-md text-center pb-2">
+                    {stat.name}
+                  </Text>
+                </Animated.View>
+              </Pressable>
+            );
+          })}
         </View>
       </View>
       {user._id == local.user && <Button onPress={signOut} label="Sign Out" />}
