@@ -69,97 +69,97 @@ export default function CameraC() {
 
     setTimeout(() => {
       setIsLoading(true); // Set loading state to true after a short delay
-    }, 200); // Adjust the delay duration as needed
+    }, 150); // Adjust the delay duration as needed
 
-    // const rsp = await fetchWithToken('/scanner', 'POST', formData, undefined);
-
-    // const rsp = await fetch(`${API_URL}/scanner`, {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: `${token.access}`,
-    //   },
-    //   body: formData,
-    // });
-
-    // const data = await rsp.json();
-    const data = {
-      success: true,
-      data: {
-        details: [
-          {
-            category: 'vegetable',
-            'eco-friendliness_score': 2,
-            original_name: 'BUNSHIMEIJI',
-            quantity: '2',
-          },
-          {
-            category: 'vegetable',
-            'eco-friendliness_score': 3,
-            matched_name: 'Brussel Sprouts',
-            original_name: 'BRUSSEL SPRUITS',
-            quantity: '1',
-          },
-          {
-            category: 'vegetable',
-            'eco-friendliness_score': 3,
-            matched_name: 'Maitake Mushrooms 100g',
-            original_name: "MAITAKE M'ROOM 100G",
-            quantity: '2',
-          },
-          {
-            category: 'dairy',
-            'eco-friendliness_score': 1,
-            original_name: 'CHK BL-I-HF HAL',
-            quantity: '1',
-          },
-          {
-            category: 'vegetable',
-            'eco-friendliness_score': 2,
-            matched_name: 'Cherry Tomatoes',
-            original_name: 'ORCL CHRY TOMATO',
-            quantity: '1',
-          },
-          {
-            category: 'vegetable',
-            'eco-friendliness_score': 2,
-            matched_name: 'Bean Sprouts 200g',
-            original_name: 'S/BEAN SPRI 200G',
-            quantity: '1',
-          },
-          {
-            category: 'beverage',
-            'eco-friendliness_score': 2,
-            original_name: 'CUT FRUIT JUICES2.50',
-            quantity: '2',
-          },
-          {
-            category: 'meat',
-            'eco-friendliness_score': 1,
-            matched_name: 'Beef Leg',
-            original_name: 'C/LEG BL BF HAL',
-            quantity: '1',
-          },
-          {
-            category: 'beverage',
-            'eco-friendliness_score': 3,
-            matched_name: 'Yakult 100ml',
-            original_name: 'YAKULT/YKLK55 100ML',
-            quantity: '1',
-          },
-          {
-            category: 'vegetable',
-            'eco-friendliness_score': 3,
-            original_name: 'ENOKI 200G',
-            quantity: '3',
-          },
-        ],
-        metrics: {
-          plastic_bags_used: 0,
-          plastic_free_packaging: 0,
-          sustainable_clothing: 1,
-        },
+    const rsp = await fetch(`${API_URL}/scanner`, {
+      method: 'POST',
+      headers: {
+        Authorization: `${token.access}`,
       },
-    };
+      body: formData,
+    });
+
+    const data = await rsp.json();
+
+    // Dummy data
+    // const data = {
+    //   success: true,
+    //   data: {
+    //     details: [
+    //       {
+    //         category: 'vegetable',
+    //         'eco-friendliness_score': 2,
+    //         original_name: 'BUNSHIMEIJI',
+    //         quantity: '2',
+    //       },
+    //       {
+    //         category: 'vegetable',
+    //         'eco-friendliness_score': 3,
+    //         matched_name: 'Brussel Sprouts',
+    //         original_name: 'BRUSSEL SPRUITS',
+    //         quantity: '1',
+    //       },
+    //       {
+    //         category: 'vegetable',
+    //         'eco-friendliness_score': 3,
+    //         matched_name: 'Maitake Mushrooms 100g',
+    //         original_name: "MAITAKE M'ROOM 100G",
+    //         quantity: '2',
+    //       },
+    //       {
+    //         category: 'dairy',
+    //         'eco-friendliness_score': 1,
+    //         original_name: 'CHK BL-I-HF HAL',
+    //         quantity: '1',
+    //       },
+    //       {
+    //         category: 'vegetable',
+    //         'eco-friendliness_score': 2,
+    //         matched_name: 'Cherry Tomatoes',
+    //         original_name: 'ORCL CHRY TOMATO',
+    //         quantity: '1',
+    //       },
+    //       {
+    //         category: 'vegetable',
+    //         'eco-friendliness_score': 2,
+    //         matched_name: 'Bean Sprouts 200g',
+    //         original_name: 'S/BEAN SPRI 200G',
+    //         quantity: '1',
+    //       },
+    //       {
+    //         category: 'beverage',
+    //         'eco-friendliness_score': 2,
+    //         original_name: 'CUT FRUIT JUICES2.50',
+    //         quantity: '2',
+    //       },
+    //       {
+    //         category: 'meat',
+    //         'eco-friendliness_score': 1,
+    //         matched_name: 'Beef Leg',
+    //         original_name: 'C/LEG BL BF HAL',
+    //         quantity: '1',
+    //       },
+    //       {
+    //         category: 'beverage',
+    //         'eco-friendliness_score': 3,
+    //         matched_name: 'Yakult 100ml',
+    //         original_name: 'YAKULT/YKLK55 100ML',
+    //         quantity: '1',
+    //       },
+    //       {
+    //         category: 'vegetable',
+    //         'eco-friendliness_score': 3,
+    //         original_name: 'ENOKI 200G',
+    //         quantity: '3',
+    //       },
+    //     ],
+    //     metrics: {
+    //       plastic_bags_used: 0,
+    //       plastic_free_packaging: 0,
+    //       sustainable_clothing: 1,
+    //     },
+    //   },
+    // };
 
     setIsLoading(false); // Set loading state to false after receiving the response
 

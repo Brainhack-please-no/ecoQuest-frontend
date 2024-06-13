@@ -28,9 +28,8 @@ export default function MetricDetail() {
   return (
     <CustomScrollView bounces>
       <SafeAreaView>
-        <View className="bg-white py-4">
-          <Text type="title">Items</Text>
-        </View>
+        <Text type="title">Items</Text>
+
         <View className="flex gap-4 pt-5">
           {details.length > 0 &&
             details.map((item, index) => (
@@ -63,18 +62,18 @@ export default function MetricDetail() {
           )}
         </View>
         <View className="my-12">
-          <Text type="title" className="pb-4">
-            Metrics
-          </Text>
-          {Object.entries(metrics).map(([key, value], index) => (
-            <View
-              key={index}
-              className="flex flex-row items-center justify-between py-1"
-            >
-              <Text type="defaultSemiBold">{metricMapping[key]}</Text>
-              <Text type="defaultBold">{value}</Text>
-            </View>
-          ))}
+          <Text type="title">Metrics</Text>
+          <View className="pt-5">
+            {Object.entries(metrics).map(([key, value], index) => (
+              <View
+                key={index}
+                className="flex flex-row items-center justify-between py-1"
+              >
+                <Text type="defaultSemiBold">{metricMapping[key]}</Text>
+                <Text type="defaultBold">{value}</Text>
+              </View>
+            ))}
+          </View>
         </View>
         <View className="">
           <Button label="Confirm" onPress={handleSubmit} />

@@ -45,6 +45,7 @@ const _useAuth = create<AuthState>((set, get) => ({
     try {
       const userToken = getToken();
       const user = getUser();
+
       if (userToken !== null) {
         get().signIn(userToken, user);
       } else {

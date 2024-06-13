@@ -26,6 +26,8 @@ export default function TabLayout() {
     return <Redirect href="/auth/select" />;
   }
 
+  const user = useAuth.use.user();
+
   return (
     <>
       <TopBar xp={100} points={200} refreshing={false} />
@@ -61,7 +63,7 @@ export default function TabLayout() {
           options={{
             title: 'Profile',
             tabBarLabel: '',
-            href: '/profile/1',
+            href: `/profile/${user._id}`,
             tabBarIcon: ({ color }) => <UserIcon color={color} size={24} />,
           }}
         />

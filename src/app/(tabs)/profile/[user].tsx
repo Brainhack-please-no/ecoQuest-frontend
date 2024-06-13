@@ -80,7 +80,7 @@ export default function User() {
       <Title title={data.username} description="5 friends" />
       <View className="flex gap-8">
         <View>
-          <Text type="defaultSemiBold" className="text-xl">
+          <Text type="defaultBold" className="text-2xl">
             Statistics
           </Text>
           <Text>Some interesting facts since you've joined</Text>
@@ -92,14 +92,14 @@ export default function User() {
               className="flex flex-row items-center justify-between py-1"
             >
               <Text type="defaultSemiBold">{value}</Text>
-              <Text type="defaultBold">{metrics[key]}</Text>
+              <Text type="defaultBold">{metrics ? metrics[key] : 0}</Text>
             </View>
           ))}
         </View>
       </View>
       <View className="flex gap-8 pt-12">
         <View>
-          <Text type="defaultSemiBold" className="text-xl">
+          <Text type="defaultBold" className="text-2xl">
             Medals
           </Text>
           <Text>
@@ -107,7 +107,7 @@ export default function User() {
             your friends!
           </Text>
         </View>
-        <View className="flex flex-row flex-wrap gap-4 pb-16">
+        <View className="flex flex-row flex-wrap gap-4 pl-4 pb-16">
           {medals.map((stat, index) => {
             const scale = new Animated.Value(1);
 

@@ -62,7 +62,7 @@ export default function HomeScreen() {
   };
 
   const getQuestStatus = (quest, userMetrics) => {
-    const userMetricValue = userMetrics[quest.metric] || 0;
+    const userMetricValue = userMetrics ? userMetrics[quest.metric] || 0 : 0;
     if (quest.more_or_less === 'more') {
       if (userMetricValue >= quest.required_amount) {
         return 'complete';
@@ -86,7 +86,7 @@ export default function HomeScreen() {
           ...quest,
           status: getQuestStatus(quest, userMetrics),
           points: quest.points,
-          currentProgress: userMetrics[quest.metric] || 0,
+          currentProgress: userMetrics ? userMetrics[quest.metric] || 0 : 0,
           requiredProgress: quest.required_amount,
         }))
         .sort((a, b) => {
